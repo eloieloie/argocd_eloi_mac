@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: denodo-dev
+  namespace: default
+  labels:
+    app: denodo-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: denodo-dev
+  template:
+    metadata:
+      labels:
+        app: denodo-dev
+    spec:
+      containers:
+      - name: denodo-platform
+        image: harbor.open.denodo.com/denodo-9/images/denodo-platform@sha256:97c30434754a913ca5848ea835736c89c06791a021aea932ca97a05903713f3a
+        ports:
+        - containerPort: 9090
+          name: http
+        - containerPort: 9999
+          name: admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: denodo-dev
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: denodo-dev
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30090
+    name: http
+  - port: 9999
+    targetPort: 9999
+    nodePort: 30099
+    name: admin
