@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solution-manager
+  namespace: default
+  labels:
+    app: solution-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: solution-manager
+  template:
+    metadata:
+      labels:
+        app: solution-manager
+    spec:
+      containers:
+      - name: solution-manager
+        image: harbor.open.denodo.com/denodo-9/images/solution-manager@sha256:fd33700efef29379edd45af5177da471fc51961547674880052691f1076d68db
+        args: ["--solutionmanager"]
+        ports:
+        - containerPort: 10090
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solution-manager
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: solution-manager
+  ports:
+  - port: 10090
+    targetPort: 10090
+    nodePort: 31090
+    name: http
