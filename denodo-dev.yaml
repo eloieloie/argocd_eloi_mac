@@ -18,6 +18,7 @@ spec:
       containers:
       - name: denodo-platform
         image: harbor.open.denodo.com/denodo-9/images/denodo-platform@sha256:97c30434754a913ca5848ea835736c89c06791a021aea932ca97a05903713f3a
+        args: ["--vdpserver"]
         ports:
         - containerPort: 9090
           name: http
